@@ -14,7 +14,7 @@ class StudentController extends Controller
     public function index()
     {
         $students = DB::table('student')->get();
-        return view('display', ['students' => $students]);
+        return view('gallery', ['students' => $students]);
     }
 
     /**
@@ -47,9 +47,13 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        return view('index');
+    }
+    public function home()
+    {
+        return view('home');
     }
 
     /**

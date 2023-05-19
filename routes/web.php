@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -16,24 +17,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/data', function () {
+    return view('data');
 });
-Route::get('/home', [UserController::class, 'home'])->name('home');
-Route::get('/aboutus', [UserController::class, 'aboutus'])->name('aboutus');
-Route::get('/contactus', [UserController::class, 'contactus'])->name('contactus');
-Route::get('/gallery', [UserController::class, 'gallery'])->name('gallery');
+Route::get('/', [StudentController::class, 'show'])->name('index');
+Route::get('/home', [StudentController::class, 'home'])->name('home')->middleware('employeemanagementsystem');
+Route::get('/aboutus', [UserController::class, 'aboutus'])->name('aboutus')->middleware('employeemanagementsystem');
+Route::get('/contactus', [UserController::class, 'contactus'])->name('contactus')->middleware('employeemanagementsystem');
+Route::get('/gallery', [StudentController::class, 'index'])->name('gallery')->middleware('employeemanagementsystem');
 Route::get('/registration', [UserController::class, 'registration'])->name('registration');
-Route::get('/create', [StudentController::class, 'create'])->name('create');
+Route::post('/registerr', [EmployeeController::class, 'store'])->name('registerr');
+Route::get('/create', [StudentController::class, 'create'])->name('create')->middleware('employeemanagementsystem');
 Route::get('/login', [UserController::class, 'login'])->name('login');
-
+Route::post('/checklogin', [EmployeeController::class, 'index'])->name('checklogin');
+Route::get('/sessioncreate', [EmployeeController::class, 'sessioncreate'])->name('sessioncreate');
+Route::get('/logout',[EmployeeController::class,'logout']);
 Route::get('/student/{sid}/{sname?}', function ($sid, $sname = NULL) {
     echo "Student Id=" . $sid . "<br>Student Name=" . $sname;
 })->where(['sid' => '[0-9]+', 'sname' => '[A-Za-z]+']);
 
-Route::get('/age/{age}', function ($age) {
-    return view();
-});
+// Route::get('/age/{age}', function ($age) {
+//     return view();
+// });
+
+// Route::get('/session', function () {
+//     $session=session()->all();
+//     echo '<pre>';
+//     print_r($session);
+//     echo '</pre>';
+// });
+
 
 Route::get('/checkage', [UserController::class, 'checkagefun'])->middleware('checkage');
 
